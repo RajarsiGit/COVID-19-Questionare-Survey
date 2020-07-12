@@ -109,7 +109,7 @@ def download():
         csv_writer.writerow([i[0] for i in cursor.description])
         csv_writer.writerows(cursor)
     connection.close()
-    return send_file("data.csv", as_attachment=True)
+    return send_file(app.root_path + "/data.csv", as_attachment=True)
 
 if __name__ == "__main__":
 	app.run()
