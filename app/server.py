@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, send_file
 from flask_mail import Mail, Message
-import sqlite3 as sql
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
 import csv
 import requests
 import os
+import pandas as pd
 
 secret_key = str(os.urandom(24))
 app = Flask(__name__)
@@ -22,7 +24,29 @@ app.config['MAIL_PASSWORD'] = 'nhdzeykclnnhkrau'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
+
+db = SQLAlchemy(app)
 mail = Mail(app)
+
+class Response(db.Model):
+    id = db.Column('response_id', db.Integer, primary_key = True)
+    name = db.Column('name', db.String(255))
+    email = db.Column('email', db.String(255))  
+    q1 = db.Column('q1', db.String(512))
+    q2 = db.Column('q2', db.String(512))
+    q3 = db.Column('q3', db.String(512))
+    q4 = db.Column('q4', db.String(512))
+    q5 = db.Column('q5', db.String(512))
+
+    def __init__(self, name, email, q1, q2, q3, q4, q5):
+        self.name = name
+        self.email = email
+        self.q1 = q1
+        self.q2 = q2
+        self.q3 = q3
+        self.q4 = q4
+        self.q5 = q5
 
 @app.route("/", methods = ['GET'])
 def home():
@@ -42,12 +66,9 @@ def submit():
             q4 = str(request.form['q16_whatAre'])
             q5 = str(request.form['q17_anyOther'])
 
-            connection = sql.connect("database.db")
-            cursor = connection.cursor()
-            data = (name, email, q1, q2, q3, q4, q5)
-            query = "INSERT INTO data (name, email, q1, q2, q3, q4, q5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-            cursor.execute(query, data)
-            connection.commit()
+            data_values = Response(name, email, q1, q2, q3, q4, q5)
+            db.session.add(data_values)
+            db.session.commit()
 
             message = Message('Submission received', recipients = [email], reply_to = 'rajarsi3997@gmail.com')
             message.body = "Mail"
@@ -70,12 +91,10 @@ def submit():
 
             msg = "Email sent & Record successfully added"
         except:
-            connection.rollback()
             msg = "Error in insert operation"
         finally:
             #print("[INFO]: ", msg)
             return render_template("submit.php")
-            connection.close()
 
 @app.route("/login", methods = ['GET'])
 def login():
@@ -92,24 +111,22 @@ def login_check():
 
 @app.route("/create", methods = ['POST'])
 def create():
-    connection = sql.connect("database.db")
     try:
-        connection.execute('CREATE TABLE data (name TEXT, email TEXT, q1 TEXT, q2 TEXT, q3 TEXT, q4 TEXT, q5 TEXT)')
+        db.create_all()
         return render_template("success_create.php")
     except Exception as e:
         return render_template("fail_create.php")
 
 @app.route("/download", methods=['POST'])
 def download():
-    connection = sql.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("select * from data")
-    with open("data.csv", "w", newline='') as csv_file:
-        csv_writer = csv.writer(csv_file)
-        csv_writer.writerow([i[0] for i in cursor.description])
-        csv_writer.writerows(cursor)
-    connection.close()
-    return send_file(app.root_path + "/data.csv", as_attachment=True)
+    data = Response.query.all()
+    data_list = []
+    for row in data:
+        data_list.append(row.__dict__)
+    df = pd.DataFrame(data_list)
+    df = df.drop(['_sa_instance_state'], axis = 1)
+    df = df[['id', 'name', 'email', 'q1', 'q2', 'q3', 'q4', 'q5']]
+    return render_template('view.html', tables=[df.to_html()], titles = ['na', 'Responses'])
 
 if __name__ == "__main__":
 	app.run()

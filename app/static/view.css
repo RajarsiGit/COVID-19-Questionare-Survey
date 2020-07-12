@@ -1,0 +1,29 @@
+body            { font-family: "Segoe UI", Arial, sans-serif;}
+a, h1, h2       { color: #377ba8; padding: 10px 25px 10px 25px;}
+h1, h2          { margin: 0; }
+h1              { border-bottom: 2px solid #eee; }
+h2              { font-size: 1.2em; }
+
+.page           { flex-flow: wrap;}
+
+table           { margin-left: 1.7%; overflow: scroll;}
+
+table.dataframe, .dataframe th, .dataframe td {
+    align-items: center; justify-content: center; 
+    border: none;
+    border-bottom: 1px solid #C8C8C8;
+    border-collapse: collapse;
+    text-align: left;
+    padding: 15px;
+    margin-bottom: 40px;
+    font-size: 0.9em;
+}
+
+th {
+    background-color: #add8e6;
+    color: white;
+}
+
+tr:nth-child(odd)		{ background-color:#eee; }
+tr:nth-child(even)	{ background-color:#fff; }
+tr:hover            { background-color: #ffff99;}
