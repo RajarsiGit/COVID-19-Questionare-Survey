@@ -6,7 +6,7 @@ h2              { font-size: 1.2em; }
 
 .page           { flex-flow: wrap;}
 
-table           { margin-left: 1.7%; overflow: scroll;}
+table           { margin: 1.7%; overflow: scroll;}
 
 table.dataframe, .dataframe th, .dataframe td {
     align-items: center; justify-content: center; 
