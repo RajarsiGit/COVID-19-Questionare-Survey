@@ -1,9 +1,6 @@
 from flask import Flask, render_template, request, send_file
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
-import csv
-import requests
 import os
 import pandas as pd
 
