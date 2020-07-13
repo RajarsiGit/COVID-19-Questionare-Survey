@@ -3,7 +3,8 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="HandheldFriendly" content="true">
-    <title>Admin Panel</title>
+    <title>Table Create Success</title>
+    <link href="https://submit.jotform.com/submit/201930766605456/" rel="stylesheet" type="text/css">
     <link rel="icon" type="image/png" href="/static/images/icons/favicon.ico"/>
     <script type="text/javascript" src="static/files/prototype.js.download"></script>
     <style type="text/css">
@@ -41,28 +42,6 @@
         padding: 35px 29px ;
         -webkit-box-shadow: 0 4px 4px -1px rgba(0,0,0,0.1);
         box-shadow: 0 4px 4px -1px rgba(0,0,0,0.1);
-      }
-
-      button {
-        width: 180px;
-        background-color: #008CBA;
-        border: 2px solid #008CBA;
-        color: white;
-        padding: 14px 30px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        transition-duration: 0.4s;
-        cursor: pointer;
-        border-radius: 4px;
-      }
-
-      button:hover {
-        background-color: #fff;
-        color: #008CBA;
-        border: 2px solid #008CBA;
       }
 
       #footer {
@@ -141,17 +120,8 @@
     <div id="stage" class="form-all">
       <p style="text-align:center;"><img src="/static/files/check.png" alt="" width="128" height="128"></p>
       <div style="text-align:center;">
-        <h1 style="text-align:center;">LOGIN SUCCESSFUL</h1>
-        <p style="text-align:center;">Select function</p>
-        <form action="/create" method="post" name="create" id="create">
-          <button type="submit">Create table</button>
-        </form>
-        <form action="/delete" method="post" name="drop" id="drop">
-          <button type="submit">Drop table</button>
-        </form>
-        <form action="/download" method="post" name="download" id="download">
-          <button type="submit">Download data</button>
-        </form>
+        <h1 style="text-align:center;">TABLE DELETE</h1>
+        <p style="text-align:center;">Table deleted successfully</p>
       </div>
     </div>
   

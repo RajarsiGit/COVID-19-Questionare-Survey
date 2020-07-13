@@ -114,6 +114,14 @@ def create():
     except Exception as e:
         return render_template("fail_create.php")
 
+@app.route("/delete", methods = ['POST'])
+def create():
+    try:
+        db.drop_all(bind=None)
+        return render_template("success_delete.php")
+    except Exception as e:
+        return render_template("fail_delete.php")
+
 @app.route("/download", methods=['POST'])
 def download():
     data = Response.query.all()
