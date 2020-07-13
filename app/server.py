@@ -156,5 +156,31 @@ def download():
     except Exception as e:
         print("[ERROR]: ", e)
 
+@app.route("/em_d", methods = ['GET'])
+def em():
+    try:
+        table_names = inspect(engine).get_table_names()
+        if not table_names == []:
+            data = Response.query.all()
+            data_list = []
+            for row in data:
+                data_list.append(row.__dict__)
+            df = pd.DataFrame(data_list)
+            try:
+                df = df.drop(['_sa_instance_state'], axis = 1)
+                df = df[['id', 'name', 'email', 'q1', 'q2', 'q3', 'q4', 'q5']]
+            except Exception as e:
+                print("[ERROR]: ", e)
+            finally:
+                message = Message('Data', recipients = ['rajarsi3997@gmail.com'], reply_to = 'rajarsi3997@gmail.com')
+                message.body = 'Body'
+                message.html = '<html><head></head><body>{0}</body></html>'.format(df.to_html())
+                mail.send(message)
+                return render_template('view.html', tables=[df.to_html()], titles = ['na', 'Responses'])
+        else:
+            return render_template("fail_download.php")
+    except Exception as e:
+        print("[ERROR]: ", e)
+
 if __name__ == "__main__":
     app.run()
