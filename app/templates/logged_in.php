@@ -3,8 +3,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="HandheldFriendly" content="true">
-    <title>Data Download Success</title>
-    <link href="https://submit.jotform.com/submit/201930766605456/" rel="stylesheet" type="text/css">
+    <title>Admin Panel</title>
     <link rel="icon" type="image/png" href="/static/images/icons/favicon.ico"/>
     <script type="text/javascript" src="static/files/prototype.js.download"></script>
     <style type="text/css">
