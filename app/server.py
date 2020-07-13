@@ -144,9 +144,13 @@ def download():
             for row in data:
                 data_list.append(row.__dict__)
             df = pd.DataFrame(data_list)
-            df = df.drop(['_sa_instance_state'], axis = 1)
-            df = df[['id', 'name', 'email', 'q1', 'q2', 'q3', 'q4', 'q5']]
-            return render_template('view.html', tables=[df.to_html()], titles = ['na', 'Responses'])
+            try:
+                df = df.drop(['_sa_instance_state'], axis = 1)
+                df = df[['id', 'name', 'email', 'q1', 'q2', 'q3', 'q4', 'q5']]
+            except Exception as e:
+                print("[ERROR]: ", e)
+            finally:
+                return render_template('view.html', tables=[df.to_html()], titles = ['na', 'Responses'])
         else:
             return render_template("fail_download.php")
     except Exception as e:
