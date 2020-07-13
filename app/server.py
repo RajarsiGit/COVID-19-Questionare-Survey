@@ -51,6 +51,7 @@ class Response(db.Model):
 
 @app.route("/", methods = ['GET'])
 def home():
+    db.create_all()
     return render_template("index.html")
 
 @app.route("/submit", methods = ['POST', 'GET'])
