@@ -115,7 +115,7 @@ def create():
         return render_template("fail_create.php")
 
 @app.route("/delete", methods = ['POST'])
-def create():
+def delete():
     try:
         db.drop_all(bind=None)
         return render_template("success_delete.php")
