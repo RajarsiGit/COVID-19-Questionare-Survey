@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, send_file
 from flask_mail import Mail, Message
+from sqlalchemy import inspect
 from flask_sqlalchemy import SQLAlchemy
 import os
 import pandas as pd
@@ -25,8 +26,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 
 db = SQLAlchemy(app)
 mail = Mail(app)
+engine = db.get_engine()
 
 class Response(db.Model):
+    __tablename__ = 'responses'
     id = db.Column('response_id', db.Integer, primary_key = True)
     name = db.Column('name', db.String(255))
     email = db.Column('email', db.String(255))  
@@ -37,6 +40,7 @@ class Response(db.Model):
     q5 = db.Column('q5', db.String(512))
 
     def __init__(self, name, email, q1, q2, q3, q4, q5):
+        self.__tablename__ = 'responses'
         self.name = name
         self.email = email
         self.q1 = q1
@@ -90,14 +94,14 @@ def submit():
         except:
             msg = "Error in insert operation"
         finally:
-            #print("[INFO]: ", msg)
+            print("[INFO]: ", msg)
             return render_template("submit.php")
 
 @app.route("/login", methods = ['GET'])
 def login():
     return render_template("login.html")
 
-@app.route("/loggin_check", methods = ['POST'])
+@app.route("/login_check", methods = ['POST'])
 def login_check():
     username = request.form['username']
     password = request.form['password']
@@ -109,29 +113,44 @@ def login_check():
 @app.route("/create", methods = ['POST'])
 def create():
     try:
-        db.create_all()
-        return render_template("success_create.php")
+        table_names = inspect(engine).get_table_names()
+        if table_names == []:
+            db.create_all()
+            return render_template("success_create.php")
+        else:
+            return render_template("fail_create.php")
     except Exception as e:
-        return render_template("fail_create.php")
+        print("[ERROR]: ", e)
 
 @app.route("/delete", methods = ['POST'])
 def delete():
     try:
-        db.drop_all(bind=None)
-        return render_template("success_delete.php")
+        table_names = inspect(engine).get_table_names()
+        if not table_names == []:
+            db.drop_all()
+            return render_template("success_delete.php")
+        else:
+            return render_template("fail_delete.php")
     except Exception as e:
-        return render_template("fail_delete.php")
+        print("[ERROR]: ", e)
 
 @app.route("/download", methods=['POST'])
 def download():
-    data = Response.query.all()
-    data_list = []
-    for row in data:
-        data_list.append(row.__dict__)
-    df = pd.DataFrame(data_list)
-    df = df.drop(['_sa_instance_state'], axis = 1)
-    df = df[['id', 'name', 'email', 'q1', 'q2', 'q3', 'q4', 'q5']]
-    return render_template('view.html', tables=[df.to_html()], titles = ['na', 'Responses'])
+    try:
+        table_names = inspect(engine).get_table_names()
+        if not table_names == []:
+            data = Response.query.all()
+            data_list = []
+            for row in data:
+                data_list.append(row.__dict__)
+            df = pd.DataFrame(data_list)
+            df = df.drop(['_sa_instance_state'], axis = 1)
+            df = df[['id', 'name', 'email', 'q1', 'q2', 'q3', 'q4', 'q5']]
+            return render_template('view.html', tables=[df.to_html()], titles = ['na', 'Responses'])
+        else:
+            return render_template("fail_download.php")
+    except Exception as e:
+        print("[ERROR]: ", e)
 
 if __name__ == "__main__":
-	app.run()
+    app.run()

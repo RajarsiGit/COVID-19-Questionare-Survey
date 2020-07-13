@@ -121,7 +121,7 @@
       <p style="text-align:center;"><img src="/static/files/close.png" alt="" width="128" height="128"></p>
       <div style="text-align:center;">
         <h1 style="text-align:center;">TABLE DELETE</h1>
-        <p style="text-align:center;">Table delete failed!</p>
+        <p style="text-align:center;">Table does not exist! Please go back!</p>
       </div>
     </div>
   

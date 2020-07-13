@@ -121,7 +121,7 @@
       <p style="text-align:center;"><img src="/static/files/close.png" alt="" width="128" height="128"></p>
       <div style="text-align:center;">
         <h1 style="text-align:center;">TABLE CREATE</h1>
-        <p style="text-align:center;">Already Exists! Please go back!</p>
+        <p style="text-align:center;">Table already exists! Please go back!</p>
       </div>
     </div>
   
