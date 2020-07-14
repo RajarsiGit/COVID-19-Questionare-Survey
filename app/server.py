@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file
 from flask_mail import Mail, Message
 from sqlalchemy import inspect
 from flask_sqlalchemy import SQLAlchemy
+from flask_heroku import Heroku
 import os
 import pandas as pd
 
@@ -23,7 +24,9 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+heroku = Heroku(app)
 db = SQLAlchemy(app)
 mail = Mail(app)
 engine = db.get_engine()
@@ -40,7 +43,6 @@ class Response(db.Model):
     q5 = db.Column('q5', db.String(512))
 
     def __init__(self, name, email, q1, q2, q3, q4, q5):
-        self.__tablename__ = 'responses'
         self.name = name
         self.email = email
         self.q1 = q1
