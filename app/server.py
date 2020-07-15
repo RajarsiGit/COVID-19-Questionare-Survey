@@ -24,7 +24,7 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:admin@localhost:5432/responses'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://orjsepeydyshob:63eaee9a856c9ef23b6721e05ad8cac93f303d9e4f47dd8f63fd18bcd7553915@ec2-18-214-211-47.compute-1.amazonaws.com:5432/d466bbigdk427k'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://kubcmttfsznvaz:3533f747a1ee4265ba20035cc67a0813728c9485513590ea15c401de4a9a2835@ec2-34-197-188-147.compute-1.amazonaws.com:5432/d3igpk33c6mtub'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
