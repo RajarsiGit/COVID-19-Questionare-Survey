@@ -120,8 +120,8 @@
     <div id="stage" class="form-all">
       <p style="text-align:center;"><img src="/static/files/close.png" alt="" width="128" height="128"></p>
       <div style="text-align:center;">
-        <h1 style="text-align:center;">TABLE VIEW</h1>
-        <p style="text-align:center;">Table does not exist! Please go back!</p>
+        <h1 style="text-align:center;">{{msg[0]}}</h1>
+        <p style="text-align:center;">{{msg[1]}}</p>
       </div>
     </div>
   

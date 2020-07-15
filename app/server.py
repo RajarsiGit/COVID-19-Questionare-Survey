@@ -23,6 +23,7 @@ app.config['MAIL_PASSWORD'] = 'nhdzeykclnnhkrau'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:admin@localhost:5432/responses'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://orjsepeydyshob:63eaee9a856c9ef23b6721e05ad8cac93f303d9e4f47dd8f63fd18bcd7553915@ec2-18-214-211-47.compute-1.amazonaws.com:5432/d466bbigdk427k'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -54,7 +55,6 @@ class Response(db.Model):
 
 @app.route("/", methods = ['GET'])
 def home():
-    db.create_all()
     return render_template("index.html")
 
 @app.route("/submit", methods = ['POST', 'GET'])
@@ -75,7 +75,7 @@ def submit():
             db.session.add(data_values)
             db.session.commit()
 
-            message = Message('Submission received', recipients = [email], reply_to = 'rajarsi3997@gmail.com')
+            '''message = Message('Submission received', recipients = [email], reply_to = 'rajarsi3997@gmail.com')
             message.body = "Mail"
             message.html = "<html>"
             message.html += "<body style=\"align-items: center; justify-content: center; font-family: \"Segoe UI\", Arial, sans-serif; background-color: #ffffff;\">"
@@ -92,14 +92,15 @@ def submit():
             message.html += "Regards,<br>Rajarsi Saha<br>"
             message.html += "<div style = \"opacity: 0.7;\">Developer<br>"
             message.html += "M: +91 89107 42101<br>E: <a style=\"color: #fff; text-decoration: none;\">rajarsi3997@gmail.com</a></div></body></html>"
-            mail.send(message)
+            mail.send(message)'''
 
             msg = "Email sent & Record successfully added"
         except:
             msg = "Error in insert operation"
+            return render_template("fail.php", msg=["Submission Failed", "Something went wrong. Please try again. Contact admin if problem not resolved!"])
         finally:
             print("[INFO]: ", msg)
-            return render_template("submit.php")
+            return render_template("success.php", msg=["Thank You!", "Your submission has been received."])
 
 @app.route("/login", methods = ['GET'])
 def login():
@@ -112,17 +113,17 @@ def login_check():
     if str(username) == 'admin' and str(password) == 'admin':
         return render_template("logged_in.php")
     else:
-        return render_template("fail_login.php")
+        return render_template("fail.php", msg=["LOGIN UNSUCESSFUL", "Username or Password is mistyped. Try again."])
 
 @app.route("/create", methods = ['POST'])
 def create():
     try:
         table_names = inspect(engine).get_table_names()
-        if table_names == []:
+        if not 'responses' in set(table_names):
             db.create_all()
-            return render_template("success_create.php")
+            return render_template("success.php", msg=["TABLE CREATE", "Table created successfully"])
         else:
-            return render_template("fail_create.php")
+            return render_template("fail.php", msg=["TABLE CREATE", "Table already exists! Please go back!"])
     except Exception as e:
         print("[ERROR]: ", e)
 
@@ -130,11 +131,11 @@ def create():
 def delete():
     try:
         table_names = inspect(engine).get_table_names()
-        if not table_names == []:
+        if 'responses' in set(table_names):
             db.drop_all()
-            return render_template("success_delete.php")
+            return render_template("success.php", msg=["TABLE DELTE", "Table deleted successfully"])
         else:
-            return render_template("fail_delete.php")
+            return render_template("fail.php", msg=["TABLE DELETE", "Table does not exist! Please go back!"])
     except Exception as e:
         print("[ERROR]: ", e)
 
@@ -142,7 +143,7 @@ def delete():
 def download():
     try:
         table_names = inspect(engine).get_table_names()
-        if not table_names == []:
+        if 'responses' in set(table_names):
             data = Response.query.all()
             data_list = []
             for row in data:
@@ -156,33 +157,7 @@ def download():
             finally:
                 return render_template('view.html', tables=[df.to_html()], titles = ['na', 'Responses'])
         else:
-            return render_template("fail_download.php")
-    except Exception as e:
-        print("[ERROR]: ", e)
-
-@app.route("/em_d", methods = ['GET'])
-def em():
-    try:
-        table_names = inspect(engine).get_table_names()
-        if not table_names == []:
-            data = Response.query.all()
-            data_list = []
-            for row in data:
-                data_list.append(row.__dict__)
-            df = pd.DataFrame(data_list)
-            try:
-                df = df.drop(['_sa_instance_state'], axis = 1)
-                df = df[['id', 'name', 'email', 'q1', 'q2', 'q3', 'q4', 'q5']]
-            except Exception as e:
-                print("[ERROR]: ", e)
-            finally:
-                message = Message('Data', recipients = ['rajarsi3997@gmail.com'], reply_to = 'rajarsi3997@gmail.com')
-                message.body = 'Body'
-                message.html = '<html><head></head><body>{0}</body></html>'.format(df.to_html())
-                mail.send(message)
-                return render_template('view.html', tables=[df.to_html()], titles = ['na', 'Responses'])
-        else:
-            return render_template("fail_download.php")
+            return render_template("fail.php")
     except Exception as e:
         print("[ERROR]: ", e)
 

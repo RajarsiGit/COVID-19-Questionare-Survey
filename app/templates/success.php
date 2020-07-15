@@ -3,10 +3,10 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="HandheldFriendly" content="true">
-    <title>Table Create Fail</title>
+    <title>Table Create Success</title>
     <link href="https://submit.jotform.com/submit/201930766605456/" rel="stylesheet" type="text/css">
     <link rel="icon" type="image/png" href="/static/images/icons/favicon.ico"/>
-    <script type="text/javascript" src="/static/files/prototype.js.download"></script>
+    <script type="text/javascript" src="static/files/prototype.js.download"></script>
     <style type="text/css">
       @import url();
       * {
@@ -118,10 +118,11 @@
   </head>
   <body class="thankyou">
     <div id="stage" class="form-all">
-      <p style="text-align:center;"><img src="/static/files/close.png" alt="" width="128" height="128"></p>
+      <p style="text-align:center;"><img src="/static/files/check.png" alt="" width="128" height="128"></p>
       <div style="text-align:center;">
-        <h1 style="text-align:center;">TABLE DELETE</h1>
-        <p style="text-align:center;">Table does not exist! Please go back!</p>
+        <h1 style="text-align:center;">{{msg[0]}}</h1>
+        <!-- p style="text-align:center;">Table created successfully</p -->
+        <p style="text-align:center;">{{msg[1]}}</p>
       </div>
     </div>
   
